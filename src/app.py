@@ -15,6 +15,27 @@ CORS(app)
 # create the jackson family object
 jackson_family = FamilyStructure("Jackson")
 
+jackson_family.add_member({
+    'first_name': 'John',
+    'last_name': 'Jackson',
+    'age': 33,
+    'lucky_numbers': [7, 13, 22]
+})
+
+jackson_family.add_member({
+    'first_name': 'Jane',
+    'last_name': 'Jackson',
+    'age': 35,
+    'lucky_numbers': [10, 14, 3]
+})
+
+jackson_family.add_member({
+    'first_name': 'Jimmy',
+    'last_name': 'Jackson',
+    'age': 5,
+    'lucky_numbers': [1]
+})
+
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -26,17 +47,41 @@ def sitemap():
     return generate_sitemap(app)
 
 @app.route('/members', methods=['GET'])
-def handle_hello():
-
-    # this is how you can use the Family datastructure by calling its methods
+def get_members():
     members = jackson_family.get_all_members()
-    response_body = {
-        "hello": "world",
-        "family": members
+    return jsonify(members), 200
+
+@app.route('/members/<int:index>', methods=['GET'])
+def get_member(index):
+    member = jackson_family.get_member(index)
+    return jsonify(member), 200
+
+@app.route('/members/<int:index>', methods=['DELETE'])
+def delete_member(index):
+    member = jackson_family.get_member(index)
+    if not member: return jsonify({ "error": "member with provided id does not exist." }), 401
+    return jsonify(jackson_family.delete_member(index)), 200
+
+@app.route('/members', methods=['POST'])
+def add_member():
+    data = request.json
+    first_name = data.get("first_name")
+    age = data.get("age")
+    lucky_numbers = data.get("lucky_numbers")
+
+    if not first_name or not age or not lucky_numbers:
+        return jsonify({ "error": "missing fields." }), 400
+    
+    member = {
+        'first_name': first_name,
+        'last_name': jackson_family.last_name,
+        'age': age,
+        'lucky_numbers': lucky_numbers
     }
 
+    return jsonify(jackson_family.add_member(member)), 200
 
-    return jsonify(response_body), 200
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
