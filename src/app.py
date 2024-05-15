@@ -60,6 +60,7 @@ def get_member(index):
 def delete_member(index):
     member = jackson_family.get_member(index)
     if not member: return jsonify({ "error": "member with provided id does not exist." }), 401
+    jackson_family.delete_member(index)
     return jsonify({ "done": True }), 200
 
 @app.route('/member', methods=['POST'])
