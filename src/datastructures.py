@@ -10,11 +10,11 @@ update this file to implement the following already declared methods:
 class FamilyStructure:
     def __init__(self, last_name):
         self.last_name = last_name;
-        self._next_id = -1; # -1 so first id used equals to 0
+        self._next_id = 1;
         self._members = [];
 
     def _generateId(self):
-        id = self._next_id + 1;
+        id = self._next_id;
         self._next_id += 1;
         return id;
 
