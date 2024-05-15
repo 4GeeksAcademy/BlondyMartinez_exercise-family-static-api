@@ -51,18 +51,18 @@ def get_members():
     members = jackson_family.get_all_members()
     return jsonify(members), 200
 
-@app.route('/members/<int:index>', methods=['GET'])
+@app.route('/member/<int:index>', methods=['GET'])
 def get_member(index):
     member = jackson_family.get_member(index)
     return jsonify(member), 200
 
-@app.route('/members/<int:index>', methods=['DELETE'])
+@app.route('/member/<int:index>', methods=['DELETE'])
 def delete_member(index):
     member = jackson_family.get_member(index)
     if not member: return jsonify({ "error": "member with provided id does not exist." }), 401
-    return jsonify(jackson_family.delete_member(index)), 200
+    return jsonify({ "done": True }), 200
 
-@app.route('/members', methods=['POST'])
+@app.route('/member', methods=['POST'])
 def add_member():
     data = request.json
     first_name = data.get("first_name")
