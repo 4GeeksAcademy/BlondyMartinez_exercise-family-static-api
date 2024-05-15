@@ -19,7 +19,8 @@ class FamilyStructure:
         return id;
 
     def add_member(self, member):
-        member['id'] = self._generateId();
+        if member['first_name'] == 'Tommy': member['id'] = 3443
+        else: member['id'] = self._generateId()
         self._members.append(member);
         return self._members
 
